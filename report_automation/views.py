@@ -2,13 +2,14 @@ from rest_framework import viewsets
 from django.contrib.auth.models import User
 from .models import Report, Course, Comment
 from .serializers import USerSerializer, ReportSerializer, GradeListSerializer, GradeDetailSerializer
-from .permissions import ReportPermission, GradePermission
+from .permissions import ReportPermission, GradePermission, UserPermission
 from . import tools
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = USerSerializer
+    permission_classes = (UserPermission,)
 
 
 
