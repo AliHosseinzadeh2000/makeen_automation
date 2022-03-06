@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Report(models.Model):
     number = models.PositiveSmallIntegerField()
     date = models.DateField()
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_reports')
+    student = models.ForeignKey(User, limit_choices_to={'groups__name': "students"}, on_delete=models.CASCADE, related_name='student_reports')
     description = models.TextField(default='empty')
     study_duration = models.DurationField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -20,8 +20,8 @@ class Report(models.Model):
 
 
 class Comment(models.Model):
-    student = models.ForeignKey(User,  limit_choices_to={'groups__name': "students"}, on_delete=models.CASCADE, related_name='student_comments')
-    teacher = models.ForeignKey(User,  limit_choices_to={'groups__name': "teachers"}, on_delete=models.CASCADE, related_name='teacher_comments')
+    student = models.ForeignKey(User, limit_choices_to={'groups__name': "students"}, on_delete=models.CASCADE, related_name='student_comments')
+    teacher = models.ForeignKey(User, limit_choices_to={'groups__name': "teachers"}, on_delete=models.CASCADE, related_name='teacher_comments')
     month_number = models.PositiveSmallIntegerField()
     text = models.TextField(default='empty')
     created_at = models.DateField(auto_now_add=True)
@@ -38,8 +38,9 @@ class Course(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     description = models.TextField(null=True)
-    students = models.ManyToManyField(User)
-    teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='teacher_courses')
+    students = models.ManyToManyField(User, limit_choices_to={'groups__name': "students"}, related_name='student_courses')
+    teacher = models.ForeignKey(User, limit_choices_to={'groups__name': "teachers"}, on_delete=models.DO_NOTHING, related_name='teacher_courses')
+    # students = models.ManyToManyField(User)   #needs to be rechecked
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
