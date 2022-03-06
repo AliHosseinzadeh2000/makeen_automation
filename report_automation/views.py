@@ -1,6 +1,12 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets
+from django.contrib.auth.models import User
 from .models import Report, Course, Comment
-from .serializers import ReportSerializer
+from .serializers import ReportSerializer, USerSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = USerSerializer
 
 
 class ReportViewSet(viewsets.ModelViewSet):
