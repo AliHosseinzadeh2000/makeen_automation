@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from django.contrib.auth.models import User
 from .models import Report, Course, Comment
 from .serializers import USerSerializer, ReportSerializer, GradeListSerializer, GradeDetailSerializer
-from .permissions import ReportPermission
+from .permissions import ReportPermission, GradePermission
 from . import tools
 
 
@@ -28,6 +28,7 @@ class GradeViewSet(viewsets.ReadOnlyModelViewSet):
         'list': GradeListSerializer,
         'retrieve': GradeDetailSerializer
     }
+    permission_classes = (GradePermission,)
 
 
     def get_serializer_context(self):

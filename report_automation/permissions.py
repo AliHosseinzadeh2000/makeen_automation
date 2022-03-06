@@ -26,3 +26,26 @@ class ReportPermission(permissions.BasePermission):
             return obj.student == request.user
         else:
             return False
+
+
+
+class GradePermission(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        if view.action == 'list':
+            return request.user.groups.filter(name='teachers').exists() or request.user.is_staff
+        elif view.action == 'retrieve':
+            return request.user.groups.filter(name='students').exists() or request.user.groups.filter(name='teachers').exists() or request.user.is_staff
+        else:
+            return False
+                                                                                                
+    def has_object_permission(self, request, view, obj):
+        # Deny actions on objects if the user is not authenticated
+        if not request.user.is_authenticated:
+            return False
+        if view.action == 'list':
+            return request.user.groups.filter(name='students').exists() or request.user.groups.filter(name='teachers').exists() or request.user.is_staff
+        if view.action == 'retrieve':
+            return  obj.student == request.user or request.user.groups.filter(name='teachers').exists() or request.user.is_staff
+        else:
+            return False
