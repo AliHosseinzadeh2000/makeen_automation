@@ -33,13 +33,21 @@ class GradeDetailSerializer(serializers.Serializer):
     student = serializers.CharField(read_only=True)
     most_study_duration = serializers.SerializerMethodField()
     least_study_duration = serializers.SerializerMethodField()
+    expected_duration = serializers.SerializerMethodField() 
+    last_30_days_total = serializers.SerializerMethodField()
     last_30_days_reports = serializers.SerializerMethodField()
-
+    
     def get_most_study_duration(self, Report):
-        return self.context['most_study_duration']
+        return str(self.context['most_study_duration'])
 
     def get_least_study_duration(self, Report):
-        return self.context['least_study_duration']
+        return str(self.context['least_study_duration'])
+    
+    def get_expected_duration(self, Report):
+        return '240 hours'
+    
+    def get_last_30_days_total(self, Report):
+        return str(self.context['last_30_days_total'])
 
     def get_last_30_days_reports(self, Report):
         data = [(report.number, str(report.study_duration)) for report in self.context['last_30_days_reports']]
@@ -47,4 +55,4 @@ class GradeDetailSerializer(serializers.Serializer):
       
     class Meta:
         model = Report
-        fields = ['student', 'most_study_duration', 'least_study_duration', 'last_30_days_reports']
+        fields = ['student', 'most_study_duration', 'least_study_duration', 'expected_duration', 'last_30_days_total', 'last_30_days_reports']

@@ -40,7 +40,8 @@ class GradeViewSet(viewsets.ReadOnlyModelViewSet):
             context['most_study_duration'] = tools.get_most_study_duration(instance.student)
             context['least_study_duration'] = tools.get_least_study_duration(instance.student)
             context['last_30_days_reports'] = tools.get_last_30_days_reports(instance.student)
-        
+            context['last_30_days_total'] = tools.get_last_30_days_total(instance.student)
+
         return context
 
 
